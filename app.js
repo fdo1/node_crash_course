@@ -1,7 +1,19 @@
 const express = require('express');
 const path = require('path');
+const members = require('./members');
+const moment = require('moment');
 
 const app = express();
+
+const logger = (req, res, next) => {
+  console.log(`${req.protocol}://${req.get('host')}${req.originalUrl} ${moment().format()}`);
+  next();
+}
+
+// Initt middleware
+app.use(logger);
+
+app.get('/api/members', (req, res) => res.json(members) );
 
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
